@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
-
+	
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,7 @@ func buildAndGenerateMarkdownFile(cmd *cobra.Command, args []string) {
 		log.Println("You must provide a input file name!")
 		return
 	}
-
+	
 	if out == "" {
 		log.Println("You must provide a output file name!")
 		return
@@ -27,18 +27,25 @@ func buildAndGenerateMarkdownFile(cmd *cobra.Command, args []string) {
 	if !strings.HasSuffix(out, ".md") {
 		out = out + ".md"
 	}
-
+	
 	lines := strings.Split(buf.String(), "\n")
 	for i, l := range lines {
 		if strings.HasPrefix(l, "<!---") && strings.HasSuffix(l, "-->") {
 			lines = append(lines[:i], lines[i+1:]...)
 		}
 	}
-
+	
 	// contents := strings.Join(lines, "\n")
 	var contents string
 	var ws int
-	for _, l := range lines {
+	for i, l := range lines {
+		if strings.HasPrefix(l, "```") {
+			if !strings.Contains(l, "bash") {
+				data := "```"
+				lines[i] = data
+				l = data
+			}
+		}
 		if l == "" {
 			ws++
 		} else {
@@ -48,7 +55,7 @@ func buildAndGenerateMarkdownFile(cmd *cobra.Command, args []string) {
 			contents += "\n" + l
 		}
 	}
-
+	
 	if err := ioutil.WriteFile(out, []byte(contents), 0644); err != nil {
 		log.Fatal(err)
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	defaultCollection = "Ungrouped"
+	defaultCollection = "默认文件夹"
 )
 
 type (
@@ -17,14 +17,14 @@ type (
 		Collections []Collection `json:"item"`
 		Variables   []Field      `json:"variable"`
 	}
-
+	
 	// Info describes the postman info section
 	Info struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
 		Schema      string `json:"schema"`
 	}
-
+	
 	// Field describes query, header, form-data and urlencoded field of request
 	Field struct {
 		Key         string `json:"key"`
@@ -34,7 +34,7 @@ type (
 		Disabled    bool   `json:"disabled"`
 		Enabled     bool   `json:"enabled"` // this field is used by env
 	}
-
+	
 	// URL describes URL of the request
 	URL struct {
 		Raw         string   `json:"raw"`
@@ -44,7 +44,7 @@ type (
 		Query       []Field  `json:"query"`
 		Variables   []Field  `json:"variable"`
 	}
-
+	
 	// Body describes a request body
 	Body struct {
 		Mode       string  `json:"mode"`
@@ -52,7 +52,7 @@ type (
 		URLEncoded []Field `json:"urlencoded"`
 		Raw        string  `json:"raw"`
 	}
-
+	
 	// Request describes a request
 	Request struct {
 		Method      string  `json:"method"`
@@ -61,7 +61,7 @@ type (
 		URL         URL     `json:"url"`
 		Description string  `json:"description"`
 	}
-
+	
 	// Response describes a request resposne
 	Response struct {
 		ID              string  `json:"id"`
@@ -73,7 +73,7 @@ type (
 		Body            string  `json:"body"`
 		PreviewLanguage string  `json:"_postman_previewlanguage"`
 	}
-
+	
 	// Item describes a request item
 	Item struct {
 		Name        string     `json:"name"`
@@ -82,7 +82,7 @@ type (
 		Responses   []Response `json:"response"`
 		IsSubFolder bool       `json:"_postman_isSubFolder"`
 	}
-
+	
 	// Collection describes a request collection/item
 	Collection struct {
 		Name        string `json:"name"`
@@ -98,19 +98,19 @@ func (d *Documentation) Open(rdr io.Reader) error {
 	if err := dcr.Decode(&d); err != nil {
 		return err
 	}
-
+	
 	// build the collections
 	d.build()
-
+	
 	// remove empty collections
 	d.removeEmptyCollections()
 	// after building all the collections, remove disabled fields
 	d.removeItemRequestDisabledField()
 	d.removeItemResponseRequestDisabledField()
-
+	
 	// sort the collections in lexical order
 	d.sortCollections()
-
+	
 	return nil
 }
 
@@ -159,7 +159,7 @@ func (d *Documentation) buildSubChildItems(itm Item, c *Collection, pn string) b
 		Request:   itm.Request,
 		Responses: itm.Responses,
 	})
-
+	
 	return false
 }
 
@@ -171,7 +171,7 @@ func (d *Documentation) sortCollections() {
 		}
 		return d.Collections[i].Name < d.Collections[j].Name
 	})
-
+	
 	for index, _ := range d.Collections {
 		sort.Slice(d.Collections[index].Items, func(i, j int) bool {
 			return d.Collections[index].Items[i].Name < d.Collections[index].Items[j].Name

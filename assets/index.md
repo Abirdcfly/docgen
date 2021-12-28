@@ -7,7 +7,7 @@
 @{{ end }}@
 
 <!--- Request items indices -->
-## Indices
+## 目录
 @{{ range $index, $c := .Data.Collections }}@
 * [@{{ $c.Name | trim }}@](#@{{ $c.Name | trim | glink }}@)
 @{{ range $i, $item := $c.Items }}@
@@ -35,7 +35,7 @@
 
 ```bash
 Method: @{{ $item.Request.Method | upper }}@
-Type: @{{ $item.Request.Body.Mode | upper }}@
+Body.Mode: @{{ $item.Request.Body.Mode | upper }}@
 URL: @{{ $item.Request.URL.Raw | trimQueryParams | e }}@
 ```
 
@@ -267,7 +267,3 @@ URL: @{{ $item.Request.URL.Raw | trimQueryParams | e }}@
 
 <!--- End  headers items -->
 @{{ end }}@
-
----
-[Back to top](#@{{ .Data.Info.Name | trim | glink }}@)
-> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: @{{date_time}}@ by [docgen](https://github.com/thedevsaddam/docgen)
